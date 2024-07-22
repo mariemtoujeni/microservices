@@ -6,7 +6,9 @@ import com.example.student.dtos.StudentDto;
 import com.example.student.entities.Student;
 import com.example.student.repositories.StudentRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 public class StudentServiceImpl implements IStudentService{
     StudentRepository studentRepo;
     SchoolClient schoolClient;
+    RestTemplate restTemplate;
     @Override
     public List<StudentDto> getAllStudents() {
         return studentRepo.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
@@ -57,6 +60,19 @@ public class StudentServiceImpl implements IStudentService{
         Student student = studentRepo.findById(studentId).orElse(null);
         if (student != null) {
             return schoolClient.getSchoolById(student.getSchoolId());
+        }
+        return null;
+    }
+
+    //getSchoolByStudent with RestTemplate
+    @Override
+    public SchoolDto getSchoolByRest(Long studentId) {
+        Student student = studentRepo.findById(studentId).orElse(null);
+        if (student != null) {
+            ResponseEntity<SchoolDto> response = restTemplate.getForEntity(
+                    "http://localhost:8081/schools/" + student.getSchoolId(),
+                    SchoolDto.class);
+            return response.getBody();
         }
         return null;
     }

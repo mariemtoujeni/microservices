@@ -29,4 +29,9 @@ public class StudentController {
     public SchoolDto getSchoolByStudent(@PathVariable Long id) {
         return service.getSchoolByStudent(id);
     }
+    @GetMapping("/rest/{id}/school")
+    public SchoolDto getSchoolByRest(@PathVariable Long id){
+        return service.getSchoolByRest(id);
+    }
+
 }

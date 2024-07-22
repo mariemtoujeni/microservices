@@ -13,5 +13,6 @@ public interface IStudentService {
     StudentDto convertToDTO(Student student);
     Student convertToEntity(StudentDto dto);
     SchoolDto getSchoolByStudent(Long studentId);
+    SchoolDto getSchoolByRest(Long studentId);
 
 }
